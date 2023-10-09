@@ -19,10 +19,12 @@ To implement within your network, this script assumes the following:
 2. Modify all variables under the "REQUIRED" section of the PowerShell script (shown below).   
 ![image](https://github.com/acmignona/Fax_Back_Script/assets/81653524/7b42881a-4027-4461-99da-ca388bf2068e)
 
-## Logical Diagram: 
+## Logical Diagram:
+*Please click diagram to enlarge* 
 ![Diagram](https://github.com/acmignona/Fax_Back_Script/assets/81653524/58a35df5-93e4-4b63-a48a-20ae495c1bdd)
 
 ## Video Demonstration:
+*Please click the below image to be redirected to YouTube.*
 [![Watch the video](https://img.youtube.com/vi/XGCBd7Fdv28/0.jpg)](https://youtu.be/XGCBd7Fdv28)
 
 
