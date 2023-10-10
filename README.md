@@ -1,6 +1,6 @@
 # Fax_Back_PowerShell_Script
 ## Overview
-This is a Fax Back Powershell integration with Zetafax Server. This script allows you to automatically fax back senders that send to a specified fax number within a specified Zetafax user inbox.
+This is a Powershell integration with Zetafax Server that will fax senders back automatically. This script allows you to automatically fax back senders that send to a specified fax number within a specified Zetafax user inbox.
 
 ### Example Use Case
 Discontinuing fax lines: If you will be discontinuing a fax line and want to notify the senders sending to this fax line, this would be an effective method alongside formal/traditional communication as well (like email, phone call, etc). 
