@@ -25,6 +25,4 @@ To implement within your network, this script assumes the following:
 
 ## Video Demonstration:
 *Please click the below image to be redirected to YouTube.*
-[![Watch the video](https://img.youtube.com/vi/XGCBd7Fdv28/0.jpg)](https://youtu.be/XGCBd7Fdv28)
-
-
+[![Watch the video](https://youtu.be/KxXgptCCjqg/0.jpg)](https://youtu.be/KxXgptCCjqg)
