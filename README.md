@@ -17,6 +17,7 @@ To implement within your network, this script assumes the following:
 
 1. Create a custom document to faxback to your senders. Example can be found in the [/files ]([url](https://github.com/acmignona/Fax_Back_PowerShell_Script/tree/main/files)) folder.
 2. Modify all variables under the "REQUIRED" section of the PowerShell script (shown below).   
+![required](https://github.com/acmignona/Fax_Back_PowerShell_Script/assets/81653524/b6b65578-1139-4ec3-9bb9-8d4002fe6477)
 
 
 ## Logical Diagram:
@@ -25,4 +26,4 @@ To implement within your network, this script assumes the following:
 
 ## Video Demonstration:
 *Please click the below image to be redirected to YouTube.*
-[![Watch the video](https://www.youtube.com/watch?v=KxXgptCCjqg/0.jpg)](https://www.youtube.com/watch?v=KxXgptCCjqg)
+[![Watch_Video](https://github.com/acmignona/Fax_Back_PowerShell_Script/assets/81653524/cd85e144-8ebc-40d1-bdb9-d9af0f486664)](https://www.youtube.com/watch?v=KxXgptCCjqg)
