@@ -26,4 +26,6 @@ To implement within your network, this script assumes the following:
 
 ## Video Demonstration:
 *Please click the below image to be redirected to YouTube.*
-[![Watch_Video](https://github.com/acmignona/Fax_Back_PowerShell_Script/assets/81653524/cd85e144-8ebc-40d1-bdb9-d9af0f486664)](https://youtu.be/KxXgptCCjqg?si=Jz9P3YCGFYp0U2u_)
+
+[![Watch the video](https://img.youtube.com/vi/KxXgptCCjqg/0.jpg)](https://youtu.be/KxXgptCCjqg?si=Jz9P3YCGFYp0U2u_)
+
