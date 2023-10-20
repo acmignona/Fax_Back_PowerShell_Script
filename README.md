@@ -9,6 +9,8 @@ This is a Powershell integration with Zetafax Server that enables you to automat
 ### Example Use Case
 Discontinuing fax lines: If you will be discontinuing a fax line and want to notify the senders sending to this fax line, this would be an effective method alongside formal/traditional communication as well (like email, phone call, etc). 
 
+I utilized this script within a high fax volume enterprise environment to fax back toll-free senders, notifying them to use our local number fax numbers instead. This yeilded $12,000 annual carrier cost-savings.
+
 ## Prerequisites:
 To implement within your network, this script assumes the following: 
 1. [Zetafax Server]([url](https://www.equisys.com/Products/Zetafax)) installed in your environment.
