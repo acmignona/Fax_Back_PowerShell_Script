@@ -1,6 +1,6 @@
 # Fax_Back_PowerShell_Script
 ## Overview
-This is a Powershell integration with Zetafax Server that enables you to automatically fax back senders that send to a specified fax number within a specified Zetafax user inbox.
+This is a Powershell integration with Zetafax Server that extends functionality of Zetafax and enables you to automatically fax back senders that send to a specified fax number within a specified Zetafax user inbox.
 
 ## Logical Diagram:
 *Please click diagram to enlarge* 
