@@ -127,6 +127,8 @@ foreach($faxline in $faxlines){
                         break
                     }
                 }
+                # Log it
+                Add-Content -path $logs.manual_substitute_log -Value "($(get-date -format MM/dd/yyyy_HH:mm)) - Sending fax back to originator CLI: $($zetafax_files.ctl_cli_number) with substitute number:$($zetafax_files.fax_number). Logic method: $($substitute_method)" -Verbose
             }
             
             # CLI substitution using just CLI AND CSID as trigger logic
@@ -156,8 +158,7 @@ foreach($faxline in $faxlines){
             Move-Item $zetafax_files.tmp_fullpath -Destination $zsubmit_path -Verbose
             Add-Content -Path $logs.faxedback -Value "$($starttime) - $($zetafax_files)"
             Add-Content -Path $logs.processed -Value $zetafax_files.process_ID
-            Add-Content -path $logs.manual_substitute_log -Value "($(get-date -format MM/dd/yyyy_HH:mm)) - Sending fax back to originator CLI: $($zetafax_files.ctl_cli_number) with substitute number:$($zetafax_files.fax_number). Logic method: $($substitute_method)" -Verbose
-            
+
             # Add the sender's number to the Senders Log
             if((get-content -path $logs.logsenders) -notcontains $zetafax_files.fax_number){
                 Add-Content -Path $logs.logsenders -Value "$($zetafax_files.fax_number),$($zetafax_files.fax_number_type)"
