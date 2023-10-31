@@ -14,7 +14,7 @@
 # to your need below.        #
 ##############################
 
-$manual_substitute_numbers = Import-Csv -Path "C:\Users\amignona\Documents\test\ZetafaxFaxBackAutomation\configs\substitutes.csv"
+$manual_substitute_numbers = Import-Csv -Path "configs\substitutes.csv"
 
 $zsubmit_path = "$(Get-Location)\zsubmit" # Enter the UNC path to thhe ZSUBMIT folder, found in Zetafax Configuration. 
 
