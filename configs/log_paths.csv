@@ -1,0 +1,2 @@
+processed,faxedback,timestamp,errors,logsenders,manual_substitute_log
+logs\processed.txt,logs\faxed_back_log.txt,logs\time_log.txt,logs\errors.txt,logs\log_sender_numbers.csv,logs\manual_substitute_log.txt

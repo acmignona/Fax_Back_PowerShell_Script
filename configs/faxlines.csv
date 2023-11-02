@@ -1,0 +1,2 @@
+ServerName,z_fax_user,z_in_path,Trigger_Number,fax_back_document,sub_file,z_submit
+TESTSERVER,TESTING,z-in,11111111111,files\example.pdf,files\example.sub,zsubmit
