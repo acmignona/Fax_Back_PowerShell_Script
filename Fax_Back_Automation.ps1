@@ -46,8 +46,6 @@ $logs = [pscustomobject]@{
 # unless you have a need to enhance #
 # this script.                      #
 #####################################
-
-
 $starttime = Get-Date 
 
 foreach($faxline in $faxlines){
@@ -73,7 +71,7 @@ foreach($faxline in $faxlines){
             $zetafax_files.ctl_content = get-content -path $file.fullname;
             $zetafax_files.ctl_messageID = $zetafax_files.ctl_content | Select-String -Pattern "MessageID";
             $zetafax_files.ctl_cli_number = ($zetafax_files.ctl_content | Select-String -Pattern "CLI") -replace '[^\d]', ''
-            $zetafax_files.ctl_csid = ($zetafax_files.ctl_content | Select-String -Pattern "CSID") -replace '[^\d]', ''
+            $zetafax_files.ctl_csid = ($zetafax_files.ctl_content | Select-String -Pattern "FullCSID") -replace "FullCSID: ",""
             $zetafax_files.sub_basename = (Get-Item -Path $faxline.sub_file).Name;
             $zetafax_files.sub_fullpath = $faxline.sub_file;
             $zetafax_files.pdf_fullpath = $faxline.fax_back_document;
@@ -84,8 +82,6 @@ foreach($faxline in $faxlines){
             $zetafax_files.fax_number_type = "CLI";
             $zetafax_files.zsubmit_doc_path = "$($zsubmit_path)\$(Split-Path $faxline.fax_back_document -Leaf)"
             
-            write-host $zetafax_files.zsubmit_doc_path
-
             # If the ProcessID is found in the Processed log, skip this document. 
             if((get-content -path $logs.processed) -contains $zetafax_files.process_ID){
                 write-host  "[SKIP]: ALREADY PROCESSED - FILE:$($file.name) - PROCESSID:$($zetafax_files.process_ID)" -ForegroundColor White -BackgroundColor DarkBlue 
@@ -111,7 +107,7 @@ foreach($faxline in $faxlines){
                     }
 
                     # Substitution Method: CLI. Find CLI row and replace with Substitute CLI
-                    if($substitute_method -eq "CLI"){
+                    if($substitute_method -eq "CLI" -and $row.CLI -contains $zetafax_files.fax_number){
                         Write-Host "CLI: Replacing $($zetafax_files.fax_number) with $($row.Substitute_CLI)." -BackgroundColor Red -ForegroundColor White
                         $zetafax_files.fax_number_type = "Substitute_CLI"
                         $zetafax_files.fax_number = $row.Substitute_CLI
@@ -119,33 +115,22 @@ foreach($faxline in $faxlines){
 
                     }
 
-                    # # Substitution Method: CLI_and_CSID. Find row with matching CLI and CSID and replace with Substitute CLI
-                    if($substitute_method -eq "CLI_and_CSID" -and $zetafax_files.ctl_csid -contains $row.CSID){
-                        Write-Host "CLI_and_CSID: Replacing $($zetafax_files.fax_number) with $($row.Substitute_CLI)." -BackgroundColor Red -ForegroundColor White
+                    # Substitution Method: CLI_and_CSID. Find row with matching CLI and CSID and replace with Substitute CLI
+                    if($substitute_method -eq "CLI_and_CSID" -and $row.CLI -contains $zetafax_files.fax_number -and ($zetafax_files.ctl_csid).Contains($row.CSID)){
+                        Write-Host "CLI_and_CSID: Replacing $($zetafax_files.fax_number) with $($row.Substitute_CLI)." -BackgroundColor DarkRed -ForegroundColor White
                         $zetafax_files.fax_number_type = "Substitute_CLI"
                         $zetafax_files.fax_number = $row.Substitute_CLI
                         break
                     }
                 }
                 # Log it
-                Add-Content -path $logs.manual_substitute_log -Value "($(get-date -format MM/dd/yyyy_HH:mm)) - Sending fax back to originator CLI: $($zetafax_files.ctl_cli_number) with substitute number:$($zetafax_files.fax_number). Logic method: $($substitute_method)" -Verbose
+                Add-Content -path $logs.manual_substitute_log -Value "($(get-date -format MM/dd/yyyy_HH:mm)) - Sending fax back to originator CLI: $($zetafax_files.ctl_cli_number) with substitute number:$($zetafax_files.fax_number). Logic method: $($substitute_method)" 
             }
-            
-            # CLI substitution using just CLI AND CSID as trigger logic
-            if($manual_substitute_numbers.CLI -contains $zetafax_files.fax_number){    
-                foreach($row in $manual_substitute_numbers){
-                    if($row.CLI -contains $zetafax_files.fax_number -and $row.CSID -contains $zetafax_files.ctl_csid){
-                        Write-Host "CLI_AND_CSID: Replacing $($zetafax_files.fax_number) with $($row.Substitute_CLI)." -BackgroundColor Red -ForegroundColor White
-                        $zetafax_files.fax_number_type = "Substitute_CLI_and_CSID"
-                        $zetafax_files.fax_number = $row.Substitute_CLI
-                    }
-                }
-            } 
-            
+
             # Create a temporary sub
             $zetafax_files.tmp_base = "FaxBackAutomation_$($faxline.z_fax_user)_$(Get-Date -Format "yyyyMMddHHmmssffff").sub"
             $zetafax_files.tmp_fullpath = "$($zetafax_files.tmp_fullpath)\$($zetafax_files.tmp_base)" 
-            Copy-Item $zetafax_files.sub_fullpath -Destination $zetafax_files.tmp_fullpath -Verbose
+            Copy-Item $zetafax_files.sub_fullpath -Destination $zetafax_files.tmp_fullpath 
         
             # Update temporary sub file with Sender's Number
             $content = get-content -Path $zetafax_files.tmp_fullpath
@@ -154,8 +139,8 @@ foreach($faxline in $faxlines){
             $content = $content -replace "REPLACE_ME_WITH_FULL_FILE_PATH", ("$($zsubmit_path)\$(Split-Path $faxline.fax_back_document -Leaf)") | Set-Content -Path $zetafax_files.tmp_fullpath
 
             # Move PDF and Sub File to Z-Submit for Processing
-            Copy-Item $zetafax_files.pdf_fullpath -Destination $zsubmit_path -Force -Verbose
-            Move-Item $zetafax_files.tmp_fullpath -Destination $zsubmit_path -Verbose
+            Copy-Item $zetafax_files.pdf_fullpath -Destination $zsubmit_path -Force 
+            Move-Item $zetafax_files.tmp_fullpath -Destination $zsubmit_path 
             Add-Content -Path $logs.faxedback -Value "$($starttime) - $($zetafax_files)"
             Add-Content -Path $logs.processed -Value $zetafax_files.process_ID
 
