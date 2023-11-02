@@ -1,4 +1,4 @@
-﻿#######################################################
+#######################################################
 # This script is intended to work with Zetafax Server #
 # This script allows you to automatically fax back    #
 # Senders that send to a specified fax number         #
@@ -15,29 +15,8 @@
 ##############################
 
 $manual_substitute_numbers = Import-Csv -Path "configs\substitutes.csv"
-
-$zsubmit_path = "$(Get-Location)\zsubmit" # Enter the UNC path to thhe ZSUBMIT folder, found in Zetafax Configuration. 
-
-$faxlines = @(   
-   # Create a custom object per fax folder or number. 
-   [pscustomobject]@{
-        ServerName='TESTSERVER'; # What is the hostname of the Zetafax server? 
-        z_fax_user='TESTING'; # What is the receiving Zetafax username? 
-        z_in_path ="$(Get-Location)\z-in"; # The path will likely be \\<SERVERNAME>\zfax\<USER>\z-in
-        Trigger_Number="11111111111"; # If we detect this number in the CTL files, we will fax back the originator
-        fax_back_document = "files\example.pdf" # Enter path of the document you'd like to fax back. 
-        sub_file = "files\example.sub" # Enter the path of the corresponding .sub file that this script will use as a template. 
-    }
-)
-
-$logs = [pscustomobject]@{
-    processed='logs\processed.txt'; 
-    faxedback='logs\faxed_back_log.txt'; 
-    timestamp='logs\time_log.txt';
-    errors='logs\errors.txt'
-    logsenders = 'logs\log_sender_numbers.csv'
-    manual_substitute_log = 'logs\manual_substitute_log.txt'
-}
+$faxlines = Import-Csv -Path "configs\faxlines.csv"
+$logs = Import-Csv -path "configs\log_paths.csv"
 
 #-----------------------------------#
 #        [END OF REQUIRED]          #
@@ -46,12 +25,13 @@ $logs = [pscustomobject]@{
 # unless you have a need to enhance #
 # this script.                      #
 #####################################
+
 $starttime = Get-Date 
 
 foreach($faxline in $faxlines){
     
     # Grab all CTLs within the folder that are < an hour old
-    $files = Get-ChildItem -Path $faxline.z_in_path -Filter *.ctl | Where-Object { $_.Name -ne "MSGDIR.CTL" -and $_.LastWriteTime -ge (Get-Date).AddHours(-3) }
+    $files = Get-ChildItem -Path $faxline.z_in_path -Filter *.ctl | Where-Object { $_.Name -ne "MSGDIR.CTL" -and $_.LastWriteTime -ge (Get-Date).AddHours(-1) }
     write-host "$($faxline.z_in_path) Total: $(($files | Measure-object ).count)" -BackgroundColor DarkRed -ForegroundColor White
     
     # Create temporary directory if needed 
@@ -80,7 +60,7 @@ foreach($faxline in $faxlines){
             $zetafax_files.process_ID= "$($faxline.ServerName)_$($faxline.z_fax_user)_$($faxline.Trigger_Number)_$($zetafax_files.ctl_messageID -replace 'MessageID: ','')";
             $zetafax_files.fax_number = ($zetafax_files.ctl_cli_number | Select-String -Pattern '\b\d{11}\b' | ForEach-Object { $_.Matches.Value })
             $zetafax_files.fax_number_type = "CLI";
-            $zetafax_files.zsubmit_doc_path = "$($zsubmit_path)\$(Split-Path $faxline.fax_back_document -Leaf)"
+            $zetafax_files.zsubmit_doc_path = "$($faxline.z_submit)\$(Split-Path $faxline.fax_back_document -Leaf)"
             
             # If the ProcessID is found in the Processed log, skip this document. 
             if((get-content -path $logs.processed) -contains $zetafax_files.process_ID){
@@ -112,7 +92,6 @@ foreach($faxline in $faxlines){
                         $zetafax_files.fax_number_type = "Substitute_CLI"
                         $zetafax_files.fax_number = $row.Substitute_CLI
                         break
-
                     }
 
                     # Substitution Method: CLI_and_CSID. Find row with matching CLI and CSID and replace with Substitute CLI
@@ -136,11 +115,11 @@ foreach($faxline in $faxlines){
             $content = get-content -Path $zetafax_files.tmp_fullpath
             $content = $content -replace "Fax: REPLACE_ME_1234567890", ("FAX: $($zetafax_files.fax_number)") | Set-Content -Path $zetafax_files.tmp_fullpath
             $content = get-content -Path $zetafax_files.tmp_fullpath
-            $content = $content -replace "REPLACE_ME_WITH_FULL_FILE_PATH", ("$($zsubmit_path)\$(Split-Path $faxline.fax_back_document -Leaf)") | Set-Content -Path $zetafax_files.tmp_fullpath
+            $content = $content -replace "REPLACE_ME_WITH_FULL_FILE_PATH", ("$($faxline.z_submit)\$(Split-Path $faxline.fax_back_document -Leaf)") | Set-Content -Path $zetafax_files.tmp_fullpath
 
             # Move PDF and Sub File to Z-Submit for Processing
-            Copy-Item $zetafax_files.pdf_fullpath -Destination $zsubmit_path -Force 
-            Move-Item $zetafax_files.tmp_fullpath -Destination $zsubmit_path 
+            Copy-Item $zetafax_files.pdf_fullpath -Destination $faxline.z_submit -Force 
+            Move-Item $zetafax_files.tmp_fullpath -Destination $faxline.z_submit 
             Add-Content -Path $logs.faxedback -Value "$($starttime) - $($zetafax_files)"
             Add-Content -Path $logs.processed -Value $zetafax_files.process_ID
 
