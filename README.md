@@ -17,7 +17,7 @@ To implement within your network, this script assumes the following:
 2. Zetafax Server configured for [Z-Submit ]([url](https://www.equisys.com/Support/technotes/howto-using-zsubmit)) processing, this can be configured within [Zetafax Configuration]([url](https://www.equisys.com/support/help_and_resource/zetafax/help/setup/zetafax_configuration.htm)).
 3. Microsoft Task Scheduler to run this script on a scheduled-basis. Run at least once per hour.
 
-*However*, if you pull this repository from Github and store the files locally, you can use relative paths to test. For more information, see video demonstration towards the end of the README file. 
+*However*, if you pull this repository from Github and store the sample files locally, you can use relative paths to test. For more information, see video demonstration towards the end of the README file. 
 
 ## How to use
 
