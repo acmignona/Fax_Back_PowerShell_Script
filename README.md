@@ -27,6 +27,7 @@ To implement within your network, this script assumes the following:
 
 ## Video Demonstration:
 *Please click the below image to be redirected to YouTube.*
-
+### Important Note: 
+This video uses an older version of the script that requires configurations defined within the script itself, rather than defining the script's configurations in the csv files found within /configs. This video is still relevant outside of this one detail.   
 [![Watch the video](https://img.youtube.com/vi/KxXgptCCjqg/0.jpg)](https://youtu.be/KxXgptCCjqg?si=Jz9P3YCGFYp0U2u_)
 
