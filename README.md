@@ -7,9 +7,9 @@ This is a Powershell integration with Zetafax Server that extends functionality 
 ![Diagram](https://github.com/acmignona/Fax_Back_PowerShell_Script/assets/81653524/dbc58ce9-504a-4b2c-80f4-8a9a72a1fdcb)
 
 ### Example Use Case
-Discontinuing fax lines: If you will be discontinuing a fax line and want to notify the senders sending to this fax line, this would be an effective method alongside formal/traditional communication as well (like email, phone call, etc). 
+Discontinuing fax lines: If you will be discontinuing a fax line and want to notify the senders sending to this fax line, this would be an effective method alongside formal/traditional means of communication (like email, phone call, etc). 
 
-I utilized this script within a high fax volume enterprise environment to fax back toll-free senders, notifying them to use our local number fax numbers instead. This yeilded $12,000 annual carrier cost-savings.
+I utilized this script within a high fax volume enterprise environment to fax back toll-free senders, notifying them to use our local fax numbers instead. This yeilded $12,000 annual carrier cost-savings.
 
 ## Prerequisites:
 To implement within your network, this script assumes the following: 
